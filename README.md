@@ -1,6 +1,23 @@
 # YouTube Video & Playlist Downloader
 
-A simple batch file tool for downloading YouTube videos and playlists using yt-dlp.
+A robust Windows batch and PowerShell tool for downloading YouTube videos and playlists using yt-dlp with enhanced features like quality selection, logging, error handling, and configuration management.
+
+## Features
+
+✅ **Multiple Quality Options** - Best quality, audio-only (MP3), video-only, or custom quality presets (1080p/720p/480p)  
+✅ **Enhanced Error Handling** - Dependency checks, input validation, and detailed error messages  
+✅ **Download Logging** - Automatic logging of all downloads with timestamps  
+✅ **Configuration Memory** - Remembers your preferred download folder  
+✅ **Resume Support** - Continue interrupted downloads automatically  
+✅ **Metadata Embedding** - Adds metadata, descriptions, and thumbnails to downloaded files  
+✅ **Batch & PowerShell Versions** - Choose between traditional batch file or modern PowerShell script  
+✅ **Command-line Support** - Run with arguments for automation and scripting
+
+## Available Scripts
+
+- `downloader.bat` - Original simple batch version
+- `downloader_improved.bat` - Enhanced batch version with all features
+- `downloader.ps1` - PowerShell version with colored output and better error handling
 
 ## Requirements
 
@@ -36,18 +53,59 @@ If you installed yt-dlp via pip, you'll need Python installed:
 
 ## How to Use
 
-1. Double-click `downloader.bat` to run the program
-2. When prompted, paste your YouTube playlist URL **or** a single video URL
-3. Enter the folder path where you want to save the downloaded videos
-4. Press Enter and wait for the download to complete
+### Batch Script (Simple)
+```cmd
+downloader_improved.bat
+```
 
-## Features
+1. Double-click `downloader_improved.bat` to run the program
+2. Choose quality preset (1-4)
+3. Paste your YouTube playlist URL **or** a single video URL
+4. Enter the folder path where you want to save the downloaded videos (or press Enter to use default)
+5. Press Enter and wait for the download to complete
 
-- Downloads entire YouTube playlists or individual videos
-- Downloads best quality video and audio (bestvideo+bestaudio format)
-- Improved download reliability with fragment retry mechanisms (20 retries per fragment)
-- Single concurrent fragment download to prevent connection issues
-- Creates the download folder if it doesn't exist
+### PowerShell Script (Recommended)
+```powershell
+# Interactive mode
+.\downloader.ps1
+
+# With command-line arguments
+.\downloader.ps1 -Url "https://youtu.be/..." -OutputPath "C:\Downloads" -Quality "1080p"
+
+# Audio only download
+.\downloader.ps1 -Url "https://youtu.be/..." -AudioOnly
+
+# Show help
+.\downloader.ps1 -Help
+```
+
+**Note:** You may need to enable PowerShell script execution:
+```powershell
+Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser
+```
+
+## Quality Options
+
+- **Best Quality** - Downloads highest quality video + audio and merges them
+- **Audio Only (MP3)** - Extracts audio and converts to MP3 format
+- **Video Only** - Downloads video without audio
+- **1080p/720p/480p** - Downloads video capped at specified resolution
+- **Custom** - Enter your own yt-dlp format string
+
+## File Organization
+
+Downloads are automatically organized:
+- **Main folder:** Video and audio files (e.g., `Channel Name - Video Title.mp4`)
+- **`metadata` subfolder:** Thumbnails, descriptions, and .info.json files
+
+This keeps your download folder clean with only media files visible, while metadata is neatly organized separately.
+
+## Configuration Files
+
+- `config.txt` / `config.json` - Stores your default download folder
+- `download.log` - Records all download activity with timestamps
+
+These files are created automatically on first run and are excluded from git.
 - Uses clean filenames based on video titles
 - Shows download progress in real-time
 - Compatible with Windows systems
@@ -64,16 +122,51 @@ If you installed yt-dlp via pip, you'll need Python installed:
 - Choose a folder location where you have write permissions
 - Try running the batch file as Administrator
 
-## Notes
+**PowerShell script won't run**
+- Run `Set-ExecutionPolicy -ExecutionPolicy RemoteSigned -Scope CurrentUser` in PowerShell as Administrator
 
-- The script uses enhanced download settings for better reliability:
-  - `-f "bestvideo+bestaudio/best"` - Downloads the best quality video and audio
-  - `--concurrent-fragments 1` - Downloads one fragment at a time to prevent connection issues
-  - `--fragment-retries 20` - Retries up to 20 times per fragment for better success rate
-  - `--extractor-args "youtube:player_client=default"` - Ensures compatibility with current YouTube restrictions
-- Downloaded files are saved with their original video titles
-- FFmpeg automatically merges the best video and audio streams into a single file
+**Download fails immediately**
+- Check the `download.log` file for detailed error messages
+- Ensure the YouTube URL is valid and accessible
+- Try updating yt-dlp to the latest version: `pip install --upgrade yt-dlp`
+
+## Technical Details
+
+The scripts use enhanced download settings for reliability:
+- `-f "bestvideo+bestaudio/best"` - Downloads the best quality video and audio
+- `--concurrent-fragments 1` - Downloads one fragment at a time to prevent connection issues
+- `--fragment-retries 20` - Retries up to 20 times per fragment for better success rate
+- `--extractor-args "youtube:player_client=default"` - Ensures compatibility with YouTube restrictions
+- `--embed-metadata` - Embeds video metadata into downloaded files
+- `--write-thumbnail` - Downloads video thumbnails
+- `--no-overwrites --continue` - Resumes interrupted downloads
+
+## Contributing
+
+Contributions are welcome! Feel free to:
+- Report bugs or issues
+- Suggest new features
+- Submit pull requests with improvements
+
+## Disclaimer
+
+This tool is for personal use only. Users are responsible for complying with YouTube's Terms of Service and applicable copyright laws. Only download content you have the right to download.
 
 ## License
 
-This is a simple utility script provided as-is for personal use.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+
+**MIT License Summary:**
+- ✅ Commercial use allowed
+- ✅ Modification allowed
+- ✅ Distribution allowed
+- ✅ Private use allowed
+- ⚠️ No warranty provided
+- ⚠️ No liability accepted
+
+Copyright (c) 2025. All rights reserved.
+
+---
+
+**Built with:** yt-dlp, FFmpeg, Windows Batch, PowerShell  
+**Maintained by:** Community Contributors
